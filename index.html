@@ -55,33 +55,48 @@
   @media(max-width:1100px){
     .wrap{padding:18px 12px;max-width:100%}
   }
-  /* mobile e tablet pequeno: header empilhado, 4 logos em grade abaixo do FDQ */
-  @media(max-width:900px){
-    header{flex-direction:column;gap:18px}
-    .header-side{flex-direction:row;justify-content:center;gap:14px}
-    .header-center{order:-1}
-    .patrocinador{width:140px;height:90px}
-    .patrocinador img{max-height:80px;max-width:130px}
-    .patrocinador:has(img[src*="d7"]){width:170px;height:100px}
-    .patrocinador img[src*="d7"]{max-height:90px;max-width:160px}
-    .patrocinador:has(img[src*="vt"]){width:150px;height:95px}
-    .patrocinador img[src*="vt"]{max-height:85px;max-width:140px}
+  /* tablet/janela media: logos nas laterais menores */
+  @media(max-width:1100px){
+    header{gap:12px}
+    .patrocinador{width:120px;height:80px}
+    .patrocinador img{max-height:70px;max-width:110px}
+    .patrocinador:has(img[src*="d7"]){width:150px;height:90px}
+    .patrocinador img[src*="d7"]{max-height:80px;max-width:140px}
+    .patrocinador:has(img[src*="vt"]){width:130px;height:85px}
+    .patrocinador img[src*="vt"]{max-height:75px;max-width:120px}
+    .header-center img.logo-fdq{width:110px;height:110px}
+    .header-center h1{font-size:28px}
   }
-  @media(max-width:600px){
+  @media(max-width:780px){
+    header{gap:8px}
+    .patrocinador{width:80px;height:55px}
+    .patrocinador img{max-height:50px;max-width:75px}
+    .patrocinador:has(img[src*="d7"]){width:100px;height:60px}
+    .patrocinador img[src*="d7"]{max-height:55px;max-width:90px}
+    .patrocinador:has(img[src*="vt"]){width:90px;height:60px}
+    .patrocinador img[src*="vt"]{max-height:55px;max-width:80px}
+    .header-center img.logo-fdq{width:90px;height:90px}
+    .header-center h1{font-size:22px}
+    .header-center p{font-size:11px}
+    .header-side{gap:6px}
+  }
+  /* celular real: empilha FDQ em cima, 4 logos numa grade 2x2 abaixo */
+  @media(max-width:520px){
     th,td{padding:8px 4px;font-size:12px}
     th.nome,td.nome{padding-left:8px;font-size:13px}
     .wrap{padding:14px 6px}
-    header{margin-bottom:18px;gap:14px}
+    header{flex-direction:column;margin-bottom:18px;gap:14px}
+    .header-center{order:-1}
     .header-center img.logo-fdq{width:100px;height:100px;margin-bottom:6px}
     .header-center h1{font-size:24px}
     .header-center p{font-size:12px}
-    .header-side{gap:8px;flex-wrap:wrap}
-    .patrocinador{width:calc(50% - 4px);height:75px;padding:4px}
-    .patrocinador img{max-height:65px;max-width:100%}
-    .patrocinador:has(img[src*="d7"]){width:calc(50% - 4px);height:75px}
-    .patrocinador img[src*="d7"]{max-height:65px;max-width:100%}
-    .patrocinador:has(img[src*="vt"]){width:calc(50% - 4px);height:75px}
-    .patrocinador img[src*="vt"]{max-height:65px;max-width:100%}
+    .header-side{flex-direction:row;justify-content:center;gap:10px;flex-wrap:wrap;width:100%}
+    .patrocinador,
+    .patrocinador:has(img[src*="d7"]),
+    .patrocinador:has(img[src*="vt"]){width:calc(50% - 6px);height:70px;padding:4px}
+    .patrocinador img,
+    .patrocinador img[src*="d7"],
+    .patrocinador img[src*="vt"]{max-height:60px;max-width:100%}
     .tabs{gap:4px;margin-bottom:14px}
     .tab{padding:8px 14px;font-size:12px}
     .panel{border-radius:10px}
