@@ -55,23 +55,33 @@
   @media(max-width:1100px){
     .wrap{padding:18px 12px;max-width:100%}
   }
-  @media(max-width:768px){
-    header{gap:10px}
-    .header-side{gap:8px}
-    .patrocinador{width:80px;height:50px}
-    .patrocinador img{max-height:45px;max-width:75px}
+  /* mobile e tablet pequeno: header empilhado, 4 logos em grade abaixo do FDQ */
+  @media(max-width:900px){
+    header{flex-direction:column;gap:18px}
+    .header-side{flex-direction:row;justify-content:center;gap:14px}
+    .header-center{order:-1}
+    .patrocinador{width:140px;height:90px}
+    .patrocinador img{max-height:80px;max-width:130px}
+    .patrocinador:has(img[src*="d7"]){width:170px;height:100px}
+    .patrocinador img[src*="d7"]{max-height:90px;max-width:160px}
+    .patrocinador:has(img[src*="vt"]){width:150px;height:95px}
+    .patrocinador img[src*="vt"]{max-height:85px;max-width:140px}
   }
   @media(max-width:600px){
     th,td{padding:8px 4px;font-size:12px}
     th.nome,td.nome{padding-left:8px;font-size:13px}
     .wrap{padding:14px 6px}
-    header{margin-bottom:18px;gap:6px}
-    .header-center img.logo-fdq{width:80px;height:80px;margin-bottom:6px}
-    .header-center h1{font-size:20px}
-    .header-center p{font-size:11px}
-    .header-side{gap:6px}
-    .patrocinador{width:60px;height:40px;padding:2px}
-    .patrocinador img{max-height:36px;max-width:56px}
+    header{margin-bottom:18px;gap:14px}
+    .header-center img.logo-fdq{width:100px;height:100px;margin-bottom:6px}
+    .header-center h1{font-size:24px}
+    .header-center p{font-size:12px}
+    .header-side{gap:8px;flex-wrap:wrap}
+    .patrocinador{width:calc(50% - 4px);height:75px;padding:4px}
+    .patrocinador img{max-height:65px;max-width:100%}
+    .patrocinador:has(img[src*="d7"]){width:calc(50% - 4px);height:75px}
+    .patrocinador img[src*="d7"]{max-height:65px;max-width:100%}
+    .patrocinador:has(img[src*="vt"]){width:calc(50% - 4px);height:75px}
+    .patrocinador img[src*="vt"]{max-height:65px;max-width:100%}
     .tabs{gap:4px;margin-bottom:14px}
     .tab{padding:8px 14px;font-size:12px}
     .panel{border-radius:10px}
