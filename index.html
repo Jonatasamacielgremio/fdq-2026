@@ -100,52 +100,73 @@ const LEGENDA_HTML = `
     <strong>Desempate:</strong> 1) Presença · 2) Vitórias · 3) Gols &nbsp;|&nbsp; <strong>GM:</strong> gols marcados · <strong>GS:</strong> gols sofridos
   </div>`;
 
-function renderTabela(panelId, dados, cols, comLegenda){
+const ESTADO = {};
+
+function renderTabela(panelId, dadosOriginais, cols, comLegenda){
   const panel = document.getElementById(panelId);
-  if(!dados || dados.length === 0){
+  if(!dadosOriginais || dadosOriginais.length === 0){
     panel.innerHTML = '<div class="empty">Sem dados ainda — temporada não iniciada.</div>';
     return;
   }
-  let html = '<div class="table-wrap"><table><thead><tr>';
-  cols.forEach((c,i) => {
-    html += `<th data-col="${i}" class="${c.cls||''}">${c.t}</th>`;
-  });
-  html += '</tr></thead><tbody>';
-  dados.forEach((r,idx) => {
-    const pos = r.pos || (idx+1);
-    html += '<tr>';
-    cols.forEach(c => {
-      let v = r[c.k];
-      if(c.k === 'pos'){
-        html += `<td class="pos">${pos}</td>`;
-      } else {
-        const txt = c.fmt ? c.fmt(v) : (v===''||v==null?'-':v);
-        let cls = c.cls || '';
-        if(c.k === 'negativos' && v < 0) cls += ' negativos bad';
-        html += `<td class="${cls}">${txt}</td>`;
-      }
-    });
-    html += '</tr>';
-  });
-  html += '</tbody></table></div>';
-  if(comLegenda) html += LEGENDA_HTML;
-  panel.innerHTML = html;
+  if(!ESTADO[panelId]) ESTADO[panelId] = { dados: dadosOriginais, cols, comLegenda, sortKey: null, asc: true };
 
-  panel.querySelectorAll('th').forEach(th => {
-    th.addEventListener('click', () => {
-      const idx = +th.dataset.col;
-      const col = cols[idx];
-      const asc = th.dataset.dir !== 'asc';
-      panel.querySelectorAll('th').forEach(x => delete x.dataset.dir);
-      th.dataset.dir = asc ? 'asc' : 'desc';
-      const sorted = [...dados].sort((a,b) => {
-        const va = a[col.k], vb = b[col.k];
-        if(typeof va === 'number') return asc ? va-vb : vb-va;
-        return asc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+  function desenhar(){
+    const st = ESTADO[panelId];
+    let dados = st.dados;
+    if(st.sortKey){
+      dados = [...dados].sort((a,b) => {
+        const va = a[st.sortKey], vb = b[st.sortKey];
+        const na = (va===''||va==null);
+        const nb = (vb===''||vb==null);
+        if(na && nb) return 0;
+        if(na) return 1;
+        if(nb) return -1;
+        if(typeof va === 'number' && typeof vb === 'number') return st.asc ? va-vb : vb-va;
+        return st.asc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
       });
-      renderTabela(panelId, sorted, cols, comLegenda);
+    }
+    let html = '<div class="table-wrap"><table><thead><tr>';
+    cols.forEach((c,i) => {
+      const arrow = st.sortKey === c.k ? (st.asc ? ' ▲' : ' ▼') : '';
+      html += `<th data-col="${i}" class="${c.cls||''}">${c.t}${arrow}</th>`;
     });
-  });
+    html += '</tr></thead><tbody>';
+    dados.forEach((r,idx) => {
+      const pos = r.pos || (idx+1);
+      html += '<tr>';
+      cols.forEach(c => {
+        let v = r[c.k];
+        if(c.k === 'pos'){
+          html += `<td class="pos">${pos}</td>`;
+        } else {
+          const txt = c.fmt ? c.fmt(v) : (v===''||v==null?'-':v);
+          let cls = c.cls || '';
+          if(c.k === 'negativos' && v < 0) cls += ' negativos bad';
+          html += `<td class="${cls}">${txt}</td>`;
+        }
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    if(comLegenda) html += LEGENDA_HTML;
+    panel.innerHTML = html;
+
+    panel.querySelectorAll('th').forEach(th => {
+      th.addEventListener('click', () => {
+        const idx = +th.dataset.col;
+        const col = cols[idx];
+        const st = ESTADO[panelId];
+        if(st.sortKey === col.k){
+          st.asc = !st.asc;
+        } else {
+          st.sortKey = col.k;
+          st.asc = (typeof dadosOriginais[0][col.k] !== 'number');
+        }
+        desenhar();
+      });
+    });
+  }
+  desenhar();
 }
 
 renderTabela('sem1', DADOS.sem1, COLS_CLASS, true);
