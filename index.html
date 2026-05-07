@@ -29,9 +29,6 @@
   tbody tr:nth-child(even){background:#0a1d12}
   tbody tr:hover{background:#1f4d2b !important}
   .pos{font-weight:900;color:#cfd8d2;width:42px;font-size:15px}
-  .pos.top1{color:#f5c518;text-shadow:0 0 10px rgba(245,197,24,.6)}
-  .pos.top2{color:#d4d4d4}
-  .pos.top3{color:#e84a1f}
   .pts{font-weight:900;color:#f5c518;font-size:16px}
   .negativos.bad{color:#e84a1f;font-weight:700}
   .empty{text-align:center;padding:50px 20px;color:#7a8a7e;font-style:italic}
@@ -116,12 +113,11 @@ function renderTabela(panelId, dados, cols, comLegenda){
   html += '</tr></thead><tbody>';
   dados.forEach((r,idx) => {
     const pos = r.pos || (idx+1);
-    const posCls = pos===1?'top1':pos===2?'top2':pos===3?'top3':'';
     html += '<tr>';
     cols.forEach(c => {
       let v = r[c.k];
       if(c.k === 'pos'){
-        html += `<td class="pos ${posCls}">${pos}</td>`;
+        html += `<td class="pos">${pos}</td>`;
       } else {
         const txt = c.fmt ? c.fmt(v) : (v===''||v==null?'-':v);
         let cls = c.cls || '';
