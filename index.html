@@ -8,7 +8,10 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0a1d12;background-image:radial-gradient(ellipse at top,#1f4d2b 0%,#0a1d12 60%);color:#e8e8e8;min-height:100vh}
-  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px}
+  .wrap{max-width:1300px;margin:0 auto;padding:24px 16px}
+  .layout{display:flex;gap:24px;align-items:flex-start}
+  .sidebar{flex:0 0 200px;position:sticky;top:24px}
+  .main{flex:1;min-width:0}
   header{text-align:center;margin-bottom:28px}
   header img{width:140px;height:140px;border-radius:50%;box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 0 4px #f5c518;margin-bottom:14px}
   header h1{font-size:clamp(26px,5vw,42px);font-weight:900;letter-spacing:.02em;color:#f5c518;text-shadow:2px 2px 0 #000,0 0 20px rgba(245,197,24,.3);text-transform:uppercase;font-style:italic}
@@ -41,12 +44,18 @@
   .legenda strong{color:#f5c518}
   footer{text-align:center;margin-top:28px;color:#7a8a7e;font-size:12px;font-weight:500}
   footer strong{color:#f5c518}
-  .patrocinadores{margin-bottom:20px}
-  .patrocinadores h2{color:#f5c518;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.15em;margin-bottom:10px;opacity:.8;text-align:left}
-  .patrocinadores-grid{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:flex-start}
-  .patrocinador{transition:transform .2s,filter .2s;display:inline-flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
-  .patrocinador:hover{transform:translateY(-2px);filter:drop-shadow(0 5px 12px rgba(245,197,24,.5))}
-  .patrocinador img{max-height:48px;max-width:130px;object-fit:contain}
+  .patrocinadores h2{color:#f5c518;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.15em;margin-bottom:14px;opacity:.85;text-align:center}
+  .patrocinadores-grid{display:flex;flex-direction:column;gap:18px;align-items:center}
+  .patrocinador{transition:transform .2s,filter .2s;display:flex;align-items:center;justify-content:center;width:100%;height:100px;padding:8px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+  .patrocinador:hover{transform:translateY(-2px) scale(1.05);filter:drop-shadow(0 6px 14px rgba(245,197,24,.5))}
+  .patrocinador img{max-height:90px;max-width:180px;object-fit:contain}
+  @media(max-width:768px){
+    .layout{flex-direction:column}
+    .sidebar{position:static;flex:none;width:100%}
+    .patrocinadores-grid{flex-direction:row;flex-wrap:wrap;justify-content:center}
+    .patrocinador{width:auto;height:70px}
+    .patrocinador img{max-height:60px;max-width:130px}
+  }
   .reload{position:fixed;bottom:20px;right:20px;background:#f5c518;color:#0a1d12;border:none;width:48px;height:48px;border-radius:50%;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-weight:900;transition:transform .2s}
   .reload:hover{transform:rotate(180deg)}
   @media(max-width:600px){
@@ -59,16 +68,21 @@
 </head>
 <body>
 <div class="wrap">
-  <section id="patrocinadores-sec" class="patrocinadores" style="display:none">
-    <h2>Patrocinadores</h2>
-    <div id="patrocinadores-grid" class="patrocinadores-grid"></div>
-  </section>
-
   <header>
     <img src="logo.png" alt="FDQ — Futebol de Quinta">
     <h1>FDQ 2026</h1>
     <p>Classificação da temporada</p>
   </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <section id="patrocinadores-sec" class="patrocinadores" style="display:none">
+        <h2>Patrocinadores</h2>
+        <div id="patrocinadores-grid" class="patrocinadores-grid"></div>
+      </section>
+    </aside>
+
+    <div class="main">
 
   <div class="tabs">
     <button class="tab active" data-tab="sem1">1º Semestre</button>
@@ -79,6 +93,9 @@
   <div id="sem1" class="panel active"></div>
   <div id="sem2" class="panel"></div>
   <div id="artilharia" class="panel"></div>
+
+    </div>
+  </div>
 
   <footer><strong>FUTEBOL DE QUINTA</strong> • desde 2021</footer>
 </div>
@@ -157,14 +174,10 @@ function renderTabela(panelId, dadosOriginais, cols, comLegenda){
         } else if(c.k === 'nome'){
           const d = r.delta;
           let deltaHtml = '';
-          if(d === null || d === undefined){
-            deltaHtml = '';
-          } else if(d > 0){
+          if(d > 0){
             deltaHtml = `<span class="delta up" title="Subiu ${d} posição(ões)">▲${d}</span>`;
           } else if(d < 0){
             deltaHtml = `<span class="delta down" title="Caiu ${Math.abs(d)} posição(ões)">▼${Math.abs(d)}</span>`;
-          } else {
-            deltaHtml = `<span class="delta same" title="Mesma posição">−</span>`;
           }
           html += `<td class="nome">${deltaHtml}${v}</td>`;
         } else {
